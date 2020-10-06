@@ -296,9 +296,15 @@ int32_t FIRRTLType::getBitWidthOrSentinel() {
 /// asynchronous reset.
 bool FIRRTLType::isResetType() {
   return TypeSwitch<FIRRTLType, bool>(*this)
-      .Case<ResetType, AsyncResetType>([](Type) { return true; })
-      .Case<UIntType>([](UIntType a) { return a.getWidth() == 1; })
-      .Default([](Type) { return false; });
+    .Case<ResetType, AsyncResetType>([](Type) {
+      return true;
+    })
+    .Case<UIntType>([](UIntType a) {
+      return a.getWidth() == 1;
+    })
+    .Default([](Type) {
+      return false;
+    });
 }
 
 //===----------------------------------------------------------------------===//
