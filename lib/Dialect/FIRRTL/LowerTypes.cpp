@@ -13,6 +13,7 @@
 #include "circt/Dialect/FIRRTL/Types.h"
 #include "circt/Dialect/FIRRTL/Visitors.h"
 #include "circt/Support/LLVM.h"
+#include "mlir/IR/FunctionSupport.h"
 #include "mlir/Pass/Pass.h"
 #include "llvm/ADT/StringMap.h"
 using namespace circt;
