@@ -102,7 +102,7 @@ processBuffer(std::unique_ptr<llvm::MemoryBuffer> ownedBuffer,
   // If enabled, run the optimizer.
   if (!disableOptimization) {
     // Apply any pass manager command line options.
-    PassManager pm(&context, /*verifyPasses:*/ true);
+    PassManager pm(&context);
     applyPassManagerCLOptions(pm);
 
     pm.addPass(createCSEPass());
@@ -110,8 +110,9 @@ processBuffer(std::unique_ptr<llvm::MemoryBuffer> ownedBuffer,
 
     // Run the lower-to-rtl pass if requested.
     if (lowerToRTL) {
-      OpPassManager &nestedPM = pm.nest<firrtl::CircuitOp>();
-      nestedPM.addPass(firrtl::createLowerFIRRTLToRTLPass());
+      OpPassManager &circuitPM = pm.nest<firrtl::CircuitOp>();
+      OpPassManager &modulePM = circuitPM.nest<firrtl::FModuleOp>();
+      modulePM.addPass(firrtl::createLowerFIRRTLToRTLPass());
     }
 
     if (failed(pm.run(module.get())))
