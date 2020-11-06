@@ -103,6 +103,7 @@ processBuffer(std::unique_ptr<llvm::MemoryBuffer> ownedBuffer,
   if (!disableOptimization) {
     // Apply any pass manager command line options.
     PassManager pm(&context);
+    pm.enableVerifier(true);
     applyPassManagerCLOptions(pm);
 
     pm.addPass(createCSEPass());
